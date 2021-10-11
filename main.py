@@ -14,7 +14,7 @@ def animate(text):
         sys.stdout.write(ch)
         sys.stdout.flush()
         if ch != " ":
-            time.sleep(0)
+            time.sleep(0.045)
 
 
 dial1 = """ 
