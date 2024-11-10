@@ -1,0 +1,109 @@
+import random
+import tkinter as tk
+from tkinter import messagebox
+
+# Function to determine the winner of each round
+def determine_winner(user_choice, computer_choice):
+    if user_choice == computer_choice:
+        return "Tie"
+    elif (user_choice == "Rock" and computer_choice == "Scissors") or \
+         (user_choice == "Paper" and computer_choice == "Rock") or \
+         (user_choice == "Scissors" and computer_choice == "Paper"):
+        return "User"
+    else:
+        return "Computer"
+
+# Function to start the game with rounds
+def start_game():
+    # Set up the game interface
+    root = tk.Tk()
+    root.title("Rock Paper Scissors - Multiple Rounds")
+
+    # Display initial instructions and choices
+    instructions_label = tk.Label(root, text="Choose your number of rounds and start the game!")
+    instructions_label.pack()
+
+    # Entry box for user to input number of rounds
+    rounds_label = tk.Label(root, text="Enter number of rounds:")
+    rounds_label.pack()
+    
+    rounds_entry = tk.Entry(root)
+    rounds_entry.pack()
+
+    # Start button for the game
+    start_button = tk.Button(root, text="Start Game", command=lambda: initialize_game(rounds_entry.get(), root))
+    start_button.pack()
+
+    root.mainloop()
+
+# Initialize game variables and start playing
+def initialize_game(rounds_input, root):
+    rounds = int(rounds_input)
+    user_score = 0
+    computer_score = 0
+    round_counter = 0
+
+    # Set up the game components after start
+    scoreboard_label = tk.Label(root, text=f"Round 0/{rounds} - User: 0 | Computer: 0")
+    scoreboard_label.pack()
+
+    result_label = tk.Label(root, text="")
+    result_label.pack()
+
+    # Function to play a round
+    def play_round(user_choice):
+        nonlocal user_score, computer_score, round_counter
+
+        # List of choices for the computer
+        choices = ["Rock", "Paper", "Scissors"]
+        computer_choice = random.choice(choices)
+
+        # Determine the winner of the round
+        winner = determine_winner(user_choice, computer_choice)
+
+        # Update scores based on the winner
+        if winner == "User":
+            user_score += 1
+        elif winner == "Computer":
+            computer_score += 1
+
+        round_counter += 1
+
+        # Update the scoreboard label
+        scoreboard_label.config(text=f"Round {round_counter}/{rounds} - User: {user_score} | Computer: {computer_score}")
+
+        # Display the result of the round
+        result_label.config(text=f"Your choice: {user_choice}\nComputer's choice: {computer_choice}\nWinner: {winner}")
+
+        # Check if the game has ended
+        if round_counter == rounds:
+            if user_score > computer_score:
+                messagebox.showinfo("Game Over", f"YOU WIN! Final Score: User: {user_score} - Computer: {computer_score}")
+            elif user_score < computer_score:
+                messagebox.showinfo("Game Over", f"YOU LOSE! Final Score: User: {user_score} - Computer: {computer_score}")
+            else:
+                messagebox.showinfo("Game Over", f"IT'S A TIE! Final Score: User: {user_score} - Computer: {computer_score}")
+
+            # Reset the game for a new session
+            reset_game()
+
+    def reset_game():
+        nonlocal user_score, computer_score, round_counter
+        user_score = 0
+        computer_score = 0
+        round_counter = 0
+        scoreboard_label.config(text="Round 0/0 - User: 0 | Computer: 0")
+        result_label.config(text="")
+
+    # Buttons for user choices (only created after the game starts)
+    rock_button = tk.Button(root, text="Rock", command=lambda: play_round("Rock"))
+    rock_button.pack(side=tk.LEFT, padx=10)
+
+    paper_button = tk.Button(root, text="Paper", command=lambda: play_round("Paper"))
+    paper_button.pack(side=tk.LEFT, padx=10)
+
+    scissors_button = tk.Button(root, text="Scissors", command=lambda: play_round("Scissors"))
+    scissors_button.pack(side=tk.LEFT, padx=10)
+
+# Run the game
+start_game()
