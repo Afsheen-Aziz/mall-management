@@ -41,7 +41,7 @@ time.sleep(0.5)
 if input("Do you want to park your vechicle in our safe hands? (y): ").lower() == "y":
     parklot.start()
 
-func = [fc.enter,theatre.user,tictactoe.game,rockpaperscissor.game,
+func = [fc.enter,theatre.user,tictactoenew.game,rockpaperscissor.game,
         vending_machine.start,parklot.start,]
 
 while True:
